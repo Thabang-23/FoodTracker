@@ -16,11 +16,16 @@ Vue.use(Auth, {
 Vue.use(Router)
 
 let router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/implicit/callback',
+      component: Auth.handleCallback()
     },
     {
       path: '/food-records',
@@ -29,10 +34,6 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
-    },
-    {
-      path: '/implicit/callback',
-      component: Auth.handleCallback()
     }
   ]
 })
