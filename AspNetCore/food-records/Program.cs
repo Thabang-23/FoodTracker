@@ -1,5 +1,6 @@
 using food_records.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -18,6 +19,13 @@ builder.Services.AddCors(options =>
             .WithOrigins("http://localhost:8080");
     });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => 
+        {
+            options.Authority = builder.Configuration["Okta:Authority"];
+            options.Audience = "api://default";
+        });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -42,6 +50,7 @@ using(var scope = app.Services.CreateScope())
 app.UseCors("VueCorsPolicy");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using food_records.Data;
 using food_records.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace food_records.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FoodRecordsController : ControllerBase
@@ -34,6 +36,8 @@ namespace food_records.Controllers
         [HttpPost]
         public async Task Post(FoodRecord record)
         {
+            Guid g = Guid.NewGuid();
+            record.Id = g.ToString();
             await _context.AddAsync(record);
 
             await _context.SaveChangesAsync();
